@@ -4,7 +4,6 @@ from views.login_view import login_logic
 
 # top navigation
 page = st_navbar(["Home", "Analytics", "Settings"])
-st.write(page)
 
 # # side bar handle
 # with st.sidebar:
