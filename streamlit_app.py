@@ -3,7 +3,13 @@ from streamlit_navigation_bar import st_navbar
 from views.login_view import login_logic
 
 # top navigation
-page = st_navbar(["Account ", "Analytics", "Settings"], show_menu=False)
+nav_options = ["Account", "About"]
+options = {
+    "show_menu": False,
+    "show_sidebar": False,
+}
+page = st_navbar(nav_options, options=options)
+
 
 # # side bar handle
 # with st.sidebar:
