@@ -1,5 +1,5 @@
-from streamlit_navigation_bar import st_navbar
 import streamlit as st
+from streamlit_navigation_bar import st_navbar
 from views.login_view import login_logic
 
 # top navigation
