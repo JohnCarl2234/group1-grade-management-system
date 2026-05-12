@@ -189,3 +189,5 @@ view/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+data/grades.csv
+data/students.csv
