@@ -173,6 +173,7 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
+# --userspace--
 # authentication controls
 auth.py
 
