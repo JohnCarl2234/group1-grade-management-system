@@ -192,4 +192,4 @@ view/
 data/grades.csv
 data/students.csv
 auth.py
-.streamlit/secrets.toml
+# .streamlit/secrets.toml

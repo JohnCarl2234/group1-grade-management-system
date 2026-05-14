@@ -59,7 +59,7 @@ public_pages = [
 # Define protected pages (only visible when authenticated)
 protected_pages = [
     st.Page("pages/1_Dashboard.py", title="Dashboard", icon=":material/dashboard:"),
-    st.Page("pages/2_Students.py", title="Students", icon=":material/group:"),
+    #st.Page("pages/2_Students.py", title="Students", icon=":material/group:"),
 ]
 
 # Build navigation based on authentication
