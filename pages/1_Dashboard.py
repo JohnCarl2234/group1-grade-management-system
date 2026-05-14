@@ -27,7 +27,49 @@ from auth import check_authentication, logout
 
 # Check authentication - redirect to login if not authenticated
 if not check_authentication():
-    st.switch_page("pages/3_login_view.py")
+    st.switch_page("pages/3_Login View.py")
+
+# Global blur effect for modals using pure CSS + simple JS detection
+st.markdown(
+    """
+    <style>
+    /* Global blur for any visible modal/dialog */
+    [role="dialog"]:not([style*="display: none"]),
+    .stModal:not([style*="display: none"]),
+    .stModalContainer:not([style*="display: none"]),
+    [data-testid*="modal"]:not([style*="display: none"]) {
+        position: relative;
+        z-index: 99999;
+    }
+    
+    /* Apply dark overlay and blur when modal is visible */
+    body:has([role="dialog"]:not([style*="display: none"])),
+    body:has(.stModal:not([style*="display: none"])),
+    body:has(.stModalContainer:not([style*="display: none"])) {
+        overflow: hidden;
+    }
+    
+    body:has([role="dialog"]:not([style*="display: none"])) div[data-testid="stAppViewContainer"],
+    body:has(.stModal:not([style*="display: none"])) div[data-testid="stAppViewContainer"],
+    body:has(.stModalContainer:not([style*="display: none"])) div[data-testid="stAppViewContainer"] {
+        filter: blur(5px);
+        pointer-events: none;
+    }
+    
+    body:has([role="dialog"]:not([style*="display: none"]))::before,
+    body:has(.stModal:not([style*="display: none"]))::before,
+    body:has(.stModalContainer:not([style*="display: none"]))::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 99998;
+    }
+    </style>
+
+    """,
+    unsafe_allow_html=True,
+)
 
 from src.utils.file_handler import (
     DASHBOARD_DISPLAY_COLUMNS,
@@ -53,10 +95,13 @@ def main():
     
     # Sidebar with logout button
     with st.sidebar:
+        st.header("Hello there, welcome!")
         st.write(f"Logged in as: {st.session_state.get('user_email', 'Unknown')}")
         if st.button("🚪 Logout", use_container_width=True):
+            st.toast("Logging out...", icon="👋")
+            time.sleep(2.0)
             logout()
-            st.switch_page("pages/3_login_view.py")
+            st.rerun()
     
     st.title("📊 Student Grade Dashboard")
     
@@ -131,7 +176,7 @@ def main():
                 if not delete_id.strip():
                     st.error("😢 Invalid input, please try again.")
                 elif not delete_id.strip().startswith("20"):
-                    st.error('😢 Student ID should have this format: "2025-xxxxx"')
+                    st.error('😢 Student ID should have this format: "20xx-xxxxx"')
                 else:
                     delete_record = get_student_record(STUDENTS_CSV, GRADES_CSV, delete_id.strip())
                     delete_name = delete_record["name"] if delete_record is not None else delete_id.strip()
@@ -144,4 +189,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -1,0 +1,77 @@
+"""Login page for the Grade Management System."""
+import streamlit as st
+import sys
+import time
+from pathlib import Path
+
+# Set page config
+st.set_page_config(
+    page_title="Login - Grade Management System",
+    layout="centered"
+)
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from auth import check_authentication, set_authenticated, sign_in_with_firebase
+
+
+if check_authentication():
+    st.switch_page("pages/1_Dashboard.py")
+
+
+def main():
+    """Render login form."""
+    # Sidebar for login page
+    with st.sidebar:
+        st.title("ℹ️ About")
+        st.write("Grade Management System")
+        st.write("A streamlined platform for educators to manage student records and grades.")
+        st.divider()
+        st.caption("© 2025 Grade Management System")
+    
+    st.title("Grade Management System")
+    
+    with st.form("login_view", clear_on_submit=False, enter_to_submit=True, border=True):
+        st.subheader("Hello there 👋")
+        st.write("Login with your school account to continue.")
+        username = st.text_input(
+            "Email",
+            placeholder="@evsu.edu.ph",
+            help="EVSU emails are only recognized"
+        )
+        password = st.text_input(
+            "Password",
+            placeholder="Enter your password here",
+            type="password",
+            max_chars=13,
+            help="Should be 13 characters long"
+        )
+        submit_button = st.form_submit_button(label='Login')
+        
+        if submit_button:
+            if not username.strip() or not password:
+                st.error("Empty fields, please try again.", icon="🫠")
+                return False
+
+            auth_result = sign_in_with_firebase(username, password)
+
+            if auth_result.get("success"):
+                st.success("Logging in...", icon="🪵")
+                set_authenticated(True, auth_result.get("email", username))
+                st.session_state.firebase_user = {
+                    "email": auth_result.get("email"),
+                    "id_token": auth_result.get("id_token"),
+                    "refresh_token": auth_result.get("refresh_token"),
+                    "local_id": auth_result.get("local_id"),
+                    "display_name": auth_result.get("display_name"),
+                }
+                time.sleep(1.0)
+                st.rerun()
+
+            st.error("Credentials are not recognized by Firebase", icon="😢")
+            return False
+
+
+if __name__ == "__main__":
+    main()

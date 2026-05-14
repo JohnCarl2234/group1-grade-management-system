@@ -1,11 +1,13 @@
-import streamlit as st
-from streamlit_navigation_bar import st_navbar
-
-# local executables
+﻿import streamlit as st
 from auth import check_authentication
-# from src.models.admin import rd_admin
 
-# Global blur effect for modals using pure CSS + simple JS detection
+st.set_page_config(
+    page_title="Grade Management System",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Global blur effect for modals
 st.markdown(
     """
     <style>
@@ -42,46 +44,27 @@ st.markdown(
         z-index: 99998;
     }
     </style>
-
     """,
     unsafe_allow_html=True,
 )
 
-# back to top controller 
+# Check authentication status
+is_authenticated = check_authentication()
 
+# Define public pages (always visible)
+public_pages = [
+    st.Page("pages/3_Login View.py", title="Login", icon=":material/login:"),
+]
 
+# Define protected pages (only visible when authenticated)
+protected_pages = [
+    st.Page("pages/1_Dashboard.py", title="Dashboard", icon=":material/dashboard:"),
+    st.Page("pages/2_Students.py", title="Students", icon=":material/group:"),
+]
 
-# # top navigation
-# nav_options = ["Account", "About"]
-# options = {
-#     "show_menu": False,
-#     "show_sidebar": False,
-# }
-# page = st_navbar(nav_options, options=options)
+# Build navigation based on authentication
+pages = protected_pages if is_authenticated else public_pages
 
-
-# # # side bar handle
-# # with st.sidebar:
-# #     st.title("Grad")
-# #     st.text("Grad is designed to help our educators in managing their students’ class records, creating reports and summaries to minimize their burden on administrative tasks.")
-
-# # Login page logic starter  
-# login_logic()
-
-# if __name__ == "__main__":
-#     student_dashboard_core()
-
-# pages = {
-#     ":material/settings: Login on Grad": [
-#     st.Page(login_logic, title="Create your account", icon=":material/login:"),
-#     st.Page("views/report_view.py", title="About", icon=":material/info: ")
-#     ]
-# }
-# pg = st.navigation(pages, position="sidebar")
-# pg.run()
-
-
-if __name__ == "__main__":
-    # Check authentication and redirect to login if needed
-    if not check_authentication():
-        st.switch_page("pages/3_login_view.py")
+# Render the multi-page app
+pg = st.navigation(pages, position="sidebar")
+pg.run()
