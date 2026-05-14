@@ -69,9 +69,8 @@ def main():
                 time.sleep(1.0)
                 st.rerun()
 
-            st.error(auth_result("error"),"Credentials are not recognized by Firebase", icon="😢")
-            return False
-
+            # Show Firebase error message (fallback to generic) and a short auth status.
+            st.error(auth_result.get("error", "Credentials are not recognized by Firebase"), icon="😢")
 
 if __name__ == "__main__":
     main()
