@@ -1,9 +1,4 @@
-"""Student dashboard view.
-
-This view displays a merged students+grades table and provides a
-minimal CRUD surface. It imports the CSV service from `utils.file_handler`.
-"""
-
+# Main Dashboard view
 from pathlib import Path
 import sys
 
