@@ -69,7 +69,7 @@ def main():
                 time.sleep(1.0)
                 st.rerun()
 
-            st.error("Credentials are not recognized by Firebase", icon="😢")
+            st.error(auth_result("error"),"Credentials are not recognized by Firebase", icon="😢")
             return False
 
 
