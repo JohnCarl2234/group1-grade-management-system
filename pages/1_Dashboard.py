@@ -1,6 +1,7 @@
 # Main Dashboard view
 from pathlib import Path
 import sys
+from app import blur_effect_function
 
 import pandas as pd
 import streamlit as st
@@ -25,46 +26,7 @@ if not check_authentication():
     st.switch_page("pages/3_Login View.py")
 
 # Global blur effect for modals using pure CSS + simple JS detection
-st.markdown(
-    """
-    <style>
-    /* Global blur for any visible modal/dialog */
-    [role="dialog"]:not([style*="display: none"]),
-    .stModal:not([style*="display: none"]),
-    .stModalContainer:not([style*="display: none"]),
-    [data-testid*="modal"]:not([style*="display: none"]) {
-        position: relative;
-        z-index: 99999;
-    }
-    
-    /* Apply dark overlay and blur when modal is visible */
-    body:has([role="dialog"]:not([style*="display: none"])),
-    body:has(.stModal:not([style*="display: none"])),
-    body:has(.stModalContainer:not([style*="display: none"])) {
-        overflow: hidden;
-    }
-    
-    body:has([role="dialog"]:not([style*="display: none"])) div[data-testid="stAppViewContainer"],
-    body:has(.stModal:not([style*="display: none"])) div[data-testid="stAppViewContainer"],
-    body:has(.stModalContainer:not([style*="display: none"])) div[data-testid="stAppViewContainer"] {
-        filter: blur(5px);
-        pointer-events: none;
-    }
-    
-    body:has([role="dialog"]:not([style*="display: none"]))::before,
-    body:has(.stModal:not([style*="display: none"]))::before,
-    body:has(.stModalContainer:not([style*="display: none"]))::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.2);
-        z-index: 99998;
-    }
-    </style>
-
-    """,
-    unsafe_allow_html=True,
-)
+blur_effect_function()
 
 from src.utils.file_handler import (
     DASHBOARD_DISPLAY_COLUMNS,

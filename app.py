@@ -8,7 +8,8 @@ st.set_page_config(
 )
 
 # Global blur effect for modals
-st.markdown(
+def blur_effect_function():
+    st.markdown(
     """
     <style>
     /* Global blur for any visible modal/dialog */
@@ -44,9 +45,12 @@ st.markdown(
         z-index: 99998;
     }
     </style>
+
     """,
     unsafe_allow_html=True,
-)
+    )
+
+blur_effect_function()
 
 # Check authentication status
 is_authenticated = check_authentication()
