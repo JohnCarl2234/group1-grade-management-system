@@ -44,7 +44,6 @@ def main():
             "Password",
             placeholder="Enter your password here",
             type="password",
-            max_chars=13,
             help="Should be 13 characters long"
         )
         submit_button = st.form_submit_button(label='Login')
