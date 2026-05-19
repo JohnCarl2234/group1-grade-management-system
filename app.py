@@ -7,48 +7,48 @@
 #     initial_sidebar_state="expanded"
 # )
 
-# # Global blur effect for modals
-# def blur_effect_function():
-#     st.markdown(
-#     """
-#     <style>
-#     /* Global blur for any visible modal/dialog */
-#     [role="dialog"]:not([style*="display: none"]),
-#     .stModal:not([style*="display: none"]),
-#     .stModalContainer:not([style*="display: none"]),
-#     [data-testid*="modal"]:not([style*="display: none"]) {
-#         position: relative;
-#         z-index: 99999;
-#     }
+# Global blur effect for modals
+def blur_effect_function():
+    st.markdown(
+    """
+    <style>
+    /* Global blur for any visible modal/dialog */
+    [role="dialog"]:not([style*="display: none"]),
+    .stModal:not([style*="display: none"]),
+    .stModalContainer:not([style*="display: none"]),
+    [data-testid*="modal"]:not([style*="display: none"]) {
+        position: relative;
+        z-index: 99999;
+    }
     
-#     /* Apply dark overlay and blur when modal is visible */
-#     body:has([role="dialog"]:not([style*="display: none"])),
-#     body:has(.stModal:not([style*="display: none"])),
-#     body:has(.stModalContainer:not([style*="display: none"])) {
-#         overflow: hidden;
-#     }
+    /* Apply dark overlay and blur when modal is visible */
+    body:has([role="dialog"]:not([style*="display: none"])),
+    body:has(.stModal:not([style*="display: none"])),
+    body:has(.stModalContainer:not([style*="display: none"])) {
+        overflow: hidden;
+    }
     
-#     body:has([role="dialog"]:not([style*="display: none"])) div[data-testid="stAppViewContainer"],
-#     body:has(.stModal:not([style*="display: none"])) div[data-testid="stAppViewContainer"],
-#     body:has(.stModalContainer:not([style*="display: none"])) div[data-testid="stAppViewContainer"] {
-#         filter: blur(5px);
-#         pointer-events: none;
-#     }
+    body:has([role="dialog"]:not([style*="display: none"])) div[data-testid="stAppViewContainer"],
+    body:has(.stModal:not([style*="display: none"])) div[data-testid="stAppViewContainer"],
+    body:has(.stModalContainer:not([style*="display: none"])) div[data-testid="stAppViewContainer"] {
+        filter: blur(5px);
+        pointer-events: none;
+    }
     
-#     body:has([role="dialog"]:not([style*="display: none"]))::before,
-#     body:has(.stModal:not([style*="display: none"]))::before,
-#     body:has(.stModalContainer:not([style*="display: none"]))::before {
-#         content: '';
-#         position: fixed;
-#         inset: 0;
-#         background: rgba(0, 0, 0, 0.2);
-#         z-index: 99998;
-#     }
-#     </style>
+    body:has([role="dialog"]:not([style*="display: none"]))::before,
+    body:has(.stModal:not([style*="display: none"]))::before,
+    body:has(.stModalContainer:not([style*="display: none"]))::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 99998;
+    }
+    </style>
 
-#     """,
-#     unsafe_allow_html=True,
-#     )
+    """,
+    unsafe_allow_html=True,
+    )
 
 # blur_effect_function()
 
@@ -74,16 +74,16 @@
 # pg.run()
 
 
-"""
-app.py — Entry point for the Grade Management System.
+# """
+# app.py — Entry point for the Grade Management System.
 
-Page routing:
-    0_Home.py              → Role selection (Admin or Student)
-    pages/1_Login.py       → Admin Firebase login
-    pages/2_Student_Lookup.py  → Student identity form
-    pages/3_Admin_Dashboard.py → Admin CRUD dashboard (protected)
-    pages/4_Student_Dashboard.py → Student grade view (session-protected)
-"""
+# Page routing:
+#     0_Home.py              → Role selection (Admin or Student)
+#     pages/1_Login.py       → Admin Firebase login
+#     pages/2_Student_Lookup.py  → Student identity form
+#     pages/3_Admin_Dashboard.py → Admin CRUD dashboard (protected)
+#     pages/4_Student_Dashboard.py → Student grade view (session-protected)
+# """
 
 import streamlit as st
 
