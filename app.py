@@ -1,11 +1,10 @@
-﻿# import streamlit as st
-# from auth import check_authentication
+﻿import streamlit as st
 
-# st.set_page_config(
-#     page_title="Grade Management System",
-#     layout="wide",
-#     initial_sidebar_state="expanded"
-# )
+st.set_page_config(
+    page_title="Grade Management System",
+    layout="wide",
+    initial_sidebar_state="collapsed",
+)
 
 # Global blur effect for modals
 def blur_effect_function():
@@ -50,7 +49,7 @@ def blur_effect_function():
     unsafe_allow_html=True,
     )
 
-# blur_effect_function()
+blur_effect_function()
 
 # # Check authentication status
 # is_authenticated = check_authentication()
@@ -84,14 +83,6 @@ def blur_effect_function():
 #     pages/3_Admin_Dashboard.py → Admin CRUD dashboard (protected)
 #     pages/4_Student_Dashboard.py → Student grade view (session-protected)
 # """
-
-import streamlit as st
-
-st.set_page_config(
-    page_title="Grade Management System",
-    layout="wide",
-    initial_sidebar_state="collapsed",
-)
 
 # Define all pages
 pages = [
