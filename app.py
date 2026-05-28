@@ -88,7 +88,7 @@ blur_effect_function()
 pages = [
     st.Page("pages/0_Home.py",              title="Home",              icon=":material/home:"),
     st.Page("pages/3_Login View.py",             title="Admin Login",       icon=":material/login:"),
-    st.Page("pages/2_Students.py",    title="Student Lookup",    icon=":material/search:"),
+    st.Page("pages/2_Students_Lookup.py",    title="Student Lookup",    icon=":material/search:"),
     st.Page("pages/1_Dashboard.py",   title="Admin Dashboard",   icon=":material/dashboard:"),
     
 ]
