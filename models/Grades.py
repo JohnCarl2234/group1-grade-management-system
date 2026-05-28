@@ -1,0 +1,2 @@
+class Grades:
+    pass
