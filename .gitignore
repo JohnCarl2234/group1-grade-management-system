@@ -181,7 +181,7 @@ auth.py
 controllers/
 
 #data handlers
-data/
+
 
 # view controllers
 view/
