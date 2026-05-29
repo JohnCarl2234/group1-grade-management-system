@@ -81,7 +81,7 @@ with col1:
         st.session_state.pop("current_student", None)
         st.session_state.pop("authenticated", None)
         st.session_state.role = "admin"
-        st.rerun()
+        st.switch_page("pages/3_Login.py")
 
 with col2:
     st.markdown(
@@ -95,7 +95,7 @@ with col2:
         st.session_state.pop("current_student", None)
         st.session_state.pop("authenticated", None)
         st.session_state.role = "student"
-        st.rerun()
+        st.switch_page("pages/2_Student_Lookup.py")
  
 # Footer - contains the copyright text
 st.markdown(
