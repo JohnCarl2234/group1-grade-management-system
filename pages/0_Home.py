@@ -81,7 +81,7 @@ with col1:
         st.session_state.pop("current_student", None)
         st.session_state.pop("authenticated", None)
         st.session_state.role = "admin"
-        st.switch_page("pages/3_Login View.py")
+        st.switch_page("pages/3_Login.py")
 
 with col2:
     st.markdown(
