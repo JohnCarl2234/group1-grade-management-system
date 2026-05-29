@@ -72,7 +72,7 @@ with st.form("student_lookup_form", border=True):
 
     name = st.text_input(
         "Full Name",
-        placeholder="e.g. Dela Cruz, Juan G."
+        placeholder="e.g. Dela Cruz, Juan G.",
         help="Enter your full name, surname first then first name and middle initial"
     )
 
@@ -86,7 +86,7 @@ with st.form("student_lookup_form", border=True):
 
     year_level = col2.selectbox(
         "Year Level",
-        options=YEAR_LEVELS
+        options=YEAR_LEVELS,
         help="Select your current year level"
     )
 
