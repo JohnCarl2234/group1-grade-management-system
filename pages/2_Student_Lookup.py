@@ -36,3 +36,83 @@ with st.sidebar:
     st.divider()
     st.caption("© 2025 Grade Management System · Group 1")
 
+def find_student(student_id: str, name: str, course: str, year_level: str) -> Student | None:
+    df = load_students_dataframe(STUDENTS_CSV)
+
+    for _, row in df.iterrows():
+        student = Student.from_dict(row.to_dict())
+
+        if student.does_match(student_id, name, course, year_level):
+            return student
+        
+    return None
+
+if st.button("Back", type="tertiary"):
+    st.session.pop("role", None)
+    st.switch_page("pages/0_Home.py")
+
+st.markdown(
+    "<h2 style='text-align:center'>👨‍🎓 Student Record Lookup</h2>",
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    "<p style='text-align:center; color:gray; margin-bottom:2rem'>"
+    "Fill in your information exactly as registered to access your grades."
+    "</p>",
+    unsafe_allow_html=True
+)
+
+with st.form("student_lookup_form", border=True):
+    student_id = st.text_input(
+        "Student ID", 
+        placeholder="e.g. 2025-01234",
+        help="Enter your student ID exactly as registered"
+    )
+
+    name = st.text_input(
+        "Full Name",
+        placeholder="e.g. Dela Cruz, Juan G."
+        help="Enter your full name, surname first then first name and middle initial"
+    )
+
+    col1, col2 = st.columns(2)
+
+    course = col1.selectbox(
+        "Course",
+        options=list(SUBJECTS.keys()),
+        help="Select your course"
+    )
+
+    year_level = col2.selectbox(
+        "Year Level",
+        options=YEAR_LEVELS
+        help="Select your current year level"
+    )
+
+    submitted = st.form_submit_button(
+        "🔍 Find My Record",
+        use_container_width=True,
+        type="primary"
+    )
+
+if submitted:
+    if not student_id.strip() or not name.strip():
+        st.error("⚠️ Please fill in all fields.", icon="⚠️")
+
+    else:
+        with st.spinner("Searching for your record..."):
+            matched_student = find_student(student_id, name, course, year_level)
+        
+        if matched_student:
+            st.session_state.current_student = matched_student
+
+            st.success("✅ Record found! Loading your dashboard...")
+
+            st.switch_page("pages/4_Student_Dashboard.py")
+        
+        else:
+            st.error(
+                "❌ No record found matching your details. "
+                "Please double-check your information or contact your teacher."
+            )
