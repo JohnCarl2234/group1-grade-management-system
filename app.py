@@ -98,13 +98,13 @@ home_page = st.Page(
 )
  
 login_page = st.Page(
-    "pages/1_Login.py",
+    "pages/3_Login.py",
     title="Admin Login",
     icon=":material/login:",
 )
  
 admin_dashboard_page = st.Page(
-    "pages/3_Admin_Dashboard.py",
+    "pages/1_Admin_Dashboard.py",
     title="Dashboard",
     icon=":material/dashboard:",
 )
