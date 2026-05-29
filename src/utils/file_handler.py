@@ -1,33 +1,42 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 
 import pandas as pd
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-STUDENT_REQUIRED_COLUMNS = ["id", "name", "course", "status"]
-GRADE_REQUIRED_COLUMNS = ["id", "grade_value"]
+from models.Student import Student
+from models.Grades import Grades
+from data.Subjects import SUBJECTS
+
+STUDENT_REQUIRED_COLUMNS = ["student_id", "name", "course", "year_level", "status"]
+GRADE_REQUIRED_COLUMNS = ["student_id", "semester", "subject", "grade"]
+
+YEAR_LEVELS  = ["1st Year", "2nd Year", "3rd Year", "4th Year"]
+SEMESTERS    = ["1st Semester", "2nd Semester"]
 
 # Mapping from internal dataframe column name -> user-facing header used in the UI.
 # Keep internal names stable (used in code and storage) and change the display
 # strings here to customize table headers without touching business logic.
 DASHBOARD_DISPLAY_COLUMNS = {
-    "id": ":material/id_card: ID Number",
+    "student_id": ":material/id_card: ID Number",
     "name": ":material/school: Students",
     "grade_value": ":material/grading: GWA",
     "status": ":material/info: Enrollment Status",
+    "year_level": ":material/calendar_month: Year Level",
     "course": ":material/book_5: Course",
 }
 
 
 def _resolve_csv_path(file_path: str | Path) -> Path:
     path = Path(file_path)
-    if path.is_absolute():
-        return path
-    return PROJECT_ROOT / path
+    return path if path.is_absolute() else PROJECT_ROOT / path
 
 
 def _read_csv_dataframe(file_path: str | Path, required_columns: list[str]) -> pd.DataFrame:
@@ -71,34 +80,75 @@ def load_grades_dataframe(grades_csv: str | Path) -> pd.DataFrame:
 
 
 def load_dashboard_dataframe(students_csv: str | Path, grades_csv: str | Path) -> pd.DataFrame:
-    """Return a merged dataframe used by the dashboard.
+    return load_students_dataframe(students_csv)
 
-    The returned dataframe uses the canonical internal column names
-    `id`, `name`, `grade_value`, `status`, `course` so views and
-    services can rely on a stable schema.
-    """
-    students_df = load_students_dataframe(students_csv)
-    grades_df = load_grades_dataframe(grades_csv)
-
-    merged = students_df.merge(grades_df, on="id", how="left")
-    desired_columns = ["id", "name", "grade_value", "status", "course"]
-
-    # Ensure all expected columns exist
-    for column in desired_columns:
-        if column not in merged.columns:
-            merged[column] = pd.NA
-
-    return merged[desired_columns]
+def get_all_students(students_csv: str | Path) -> list[Student]:
+    
+    df = load_students_dataframe(students_csv)
+ 
+    # Convert each row into a Student object using Student.from_dict()
+    return [Student.from_dict(row.to_dict()) for _, row in df.iterrows()]
 
 
 def get_student_record(students_csv: str | Path, grades_csv: str | Path, student_id: str) -> dict[str, object] | None:
-    """Return a single student record (merged with grade) or None."""
-    dashboard_df = load_dashboard_dataframe(students_csv, grades_csv)
-    matches = dashboard_df[dashboard_df["id"].astype(str) == str(student_id)]
+    dashboard_df = load_students_dataframe(students_csv)
+ 
+    # Filter rows by student ID
+    matches = dashboard_df[dashboard_df["id"].astype(str).str.strip() == str(student_id).strip()]
+ 
     if matches.empty:
         return None
+ 
+    # Convert the matched row to a Student object
+    return Student.from_dict(matches.iloc[0].to_dict())
 
-    return matches.iloc[0].to_dict()
+def find_student_by_info(
+    students_csv: str | Path,
+    student_id: str,
+    name: str,
+    course: str,
+    year_level: str,
+) -> Student | None:
+
+    # Get all students as Student objects
+    all_students = get_all_students(students_csv)
+ 
+    # Use Student.matches() to check each one
+    # This is the OOP approach — matching logic lives in the Student class
+    for student in all_students:
+        if student.matches(student_id, name, course, year_level):
+            return student
+ 
+    return None
+
+def get_student_grades(
+    grades_csv: str | Path,
+    student_id: str,
+) -> list[Grades]:
+
+    df = load_grades_dataframe(grades_csv)
+ 
+    # Filter rows for this student only
+    student_rows = df[
+        df["student_id"].astype(str).str.strip() == str(student_id).strip()
+    ]
+ 
+    if student_rows.empty:
+        return []
+ 
+    # Convert each row into a Grade object using Grade.from_dict()
+    return [Grades.from_dict(row.to_dict()) for _, row in student_rows.iterrows()]
+
+def get_student_grades_by_semester(
+    grades_csv: str | Path,
+    student_id: str,
+    semester: str,
+) -> list[Grades]:
+
+    all_grades = get_student_grades(grades_csv, student_id)
+ 
+    # Filter by semester
+    return [g for g in all_grades if g.semester == semester]
 
 
 def upsert_student_record(
@@ -108,34 +158,62 @@ def upsert_student_record(
     student_id: str,
     name: str,
     course: str,
+    year_level: str,
     status: str,
-    grade_value: str | float | None = None,
+    grades: dict[str, dict[str, str]] | None = None,
 ) -> None:
     # Basic validation and normalization
-    student_id = str(student_id).strip()
-    if not student_id:
-        raise ValueError("student_id is required")
-
     students_df = load_students_dataframe(students_csv)
-    grades_df = load_grades_dataframe(grades_csv)
-
-    # Build canonical rows to insert/update
-    student_row = pd.DataFrame(
-        [{"id": student_id, "name": name.strip(), "course": course.strip(), "status": status.strip()}]
+ 
+    # Build a Student object to ensure data is clean and consistent
+    student = Student(
+        id=student_id,
+        name=name,
+        course=course,
+        year_level=year_level,
+        status=status,
     )
-    grade_row = pd.DataFrame([{"id": student_id, "grade_value": grade_value}])
-
-    # Remove any existing rows for this id then append the new one
+ 
+    # Remove existing row for this student (if any), then append new row
     students_df = students_df[students_df["id"].astype(str) != student_id]
-    grades_df = grades_df[grades_df["id"].astype(str) != student_id]
-
-    students_df = pd.concat([students_df, student_row], ignore_index=True)
-    grades_df = pd.concat([grades_df, grade_row], ignore_index=True)
-
-    # Atomic write to avoid corruption on failure
+    new_student_row = pd.DataFrame([student.to_dict()])
+    students_df = pd.concat([students_df, new_student_row], ignore_index=True)
+ 
+    # Atomically write updated students CSV
     _write_csv_dataframe(students_csv, students_df)
-    _write_csv_dataframe(grades_csv, grades_df)
-
+ 
+    # ── Update grades (only if grades dict was provided) ──────────────────────
+    if grades:
+        grades_df = load_grades_dataframe(grades_csv)
+ 
+        # Remove all existing grade rows for this student
+        grades_df = grades_df[grades_df["student_id"].astype(str) != student_id]
+ 
+        # Build new Grade objects and collect their dicts
+        new_grade_rows = []
+        for semester, subjects in grades.items():
+            for subject, grade_val in subjects.items():
+                # Skip empty or placeholder values
+                if grade_val and grade_val != "— No grade yet —":
+                    # Build a Grade object — this validates the data
+                    grade_obj = Grades(
+                        student_id=student_id,
+                        semester=semester,
+                        subject=subject,
+                        grade=grade_val,
+                    )
+                    new_grade_rows.append(grade_obj.to_dict())
+ 
+        # Append new grade rows if any
+        if new_grade_rows:
+            grades_df = pd.concat(
+                [grades_df, pd.DataFrame(new_grade_rows)],
+                ignore_index=True,
+            )
+ 
+        # Atomically write updated grades CSV
+        _write_csv_dataframe(grades_csv, grades_df)
+ 
 
 def delete_student_record(students_csv: str | Path, grades_csv: str | Path, student_id: str) -> None:
     """Delete a student (and their grade) from both CSVs by id."""
@@ -143,11 +221,27 @@ def delete_student_record(students_csv: str | Path, grades_csv: str | Path, stud
     if not student_id:
         raise ValueError("student_id is required")
 
+    # Remove from students.csv
     students_df = load_students_dataframe(students_csv)
-    grades_df = load_grades_dataframe(grades_csv)
-
     students_df = students_df[students_df["id"].astype(str) != student_id]
-    grades_df = grades_df[grades_df["id"].astype(str) != student_id]
-
     _write_csv_dataframe(students_csv, students_df)
+ 
+    # Remove all grade rows for this student from grades.csv
+    grades_df = load_grades_dataframe(grades_csv)
+    grades_df = grades_df[grades_df["student_id"].astype(str) != student_id]
     _write_csv_dataframe(grades_csv, grades_df)
+
+
+def compute_average(grades: list[Grades]) -> float:
+
+    return Grades.compute_average(grades)
+ 
+ 
+def get_remarks(grade: float) -> str:
+
+    return Grades.average_remarks(grade)
+ 
+ 
+def get_grade_description(grade: float) -> str:
+
+    return Grades.average_description(grade)
