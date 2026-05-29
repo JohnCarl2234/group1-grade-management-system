@@ -12,20 +12,20 @@ class Student:
     
     def to_dict(self) -> dict:
         return {
-            "student ID": self.student_id, 
+            "student_id": self.student_id, 
             "name": self.name,
             "course": self.course,
-            "year level": self.year_level,
+            "year_level": self.year_level,
             "status": self.status
         }
     
     @staticmethod
-    def get_data(data: dict) -> "Student":
+    def from_dict(data: dict) -> "Student":
         return Student(
-            student_id = data.get("student ID", ""),
+            student_id = data.get("student_id", ""),
             name = data.get("name", ""),
             course = data.get("course", ""),
-            year_level = data.get("year level", ""),
+            year_level = data.get("year_level", ""),
             status = data.get("status", "Enrolled")
         )
     

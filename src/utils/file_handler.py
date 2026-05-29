@@ -20,6 +20,7 @@ GRADE_REQUIRED_COLUMNS = ["student_id", "semester", "subject", "grade"]
 
 YEAR_LEVELS  = ["1st Year", "2nd Year", "3rd Year", "4th Year"]
 SEMESTERS    = ["1st Semester", "2nd Semester"]
+VALID_GRADES = Grades.VALID_GRADES
 
 # Mapping from internal dataframe column name -> user-facing header used in the UI.
 # Keep internal names stable (used in code and storage) and change the display
@@ -27,7 +28,6 @@ SEMESTERS    = ["1st Semester", "2nd Semester"]
 DASHBOARD_DISPLAY_COLUMNS = {
     "student_id": ":material/id_card: ID Number",
     "name": ":material/school: Students",
-    "grade_value": ":material/grading: GWA",
     "status": ":material/info: Enrollment Status",
     "year_level": ":material/calendar_month: Year Level",
     "course": ":material/book_5: Course",
@@ -94,7 +94,7 @@ def get_student_record(students_csv: str | Path, grades_csv: str | Path, student
     dashboard_df = load_students_dataframe(students_csv)
  
     # Filter rows by student ID
-    matches = dashboard_df[dashboard_df["id"].astype(str).str.strip() == str(student_id).strip()]
+    matches = dashboard_df[dashboard_df["student_id"].astype(str).str.strip() == str(student_id).strip()]
  
     if matches.empty:
         return None
@@ -116,7 +116,7 @@ def find_student_by_info(
     # Use Student.matches() to check each one
     # This is the OOP approach — matching logic lives in the Student class
     for student in all_students:
-        if student.matches(student_id, name, course, year_level):
+        if student.does_match(student_id, name, course, year_level):
             return student
  
     return None
@@ -167,7 +167,7 @@ def upsert_student_record(
  
     # Build a Student object to ensure data is clean and consistent
     student = Student(
-        id=student_id,
+        student_id=student_id,
         name=name,
         course=course,
         year_level=year_level,
@@ -175,7 +175,7 @@ def upsert_student_record(
     )
  
     # Remove existing row for this student (if any), then append new row
-    students_df = students_df[students_df["id"].astype(str) != student_id]
+    students_df = students_df[students_df["student_id"].astype(str) != student_id]
     new_student_row = pd.DataFrame([student.to_dict()])
     students_df = pd.concat([students_df, new_student_row], ignore_index=True)
  
@@ -223,7 +223,7 @@ def delete_student_record(students_csv: str | Path, grades_csv: str | Path, stud
 
     # Remove from students.csv
     students_df = load_students_dataframe(students_csv)
-    students_df = students_df[students_df["id"].astype(str) != student_id]
+    students_df = students_df[students_df["student_id"].astype(str) != student_id]
     _write_csv_dataframe(students_csv, students_df)
  
     # Remove all grade rows for this student from grades.csv

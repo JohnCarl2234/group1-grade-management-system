@@ -17,7 +17,7 @@ from auth import check_authentication, set_authenticated, sign_in_with_firebase
 
 
 if check_authentication():
-    st.switch_page("pages/1_Dashboard.py")
+    st.switch_page("pages/1_Admin_Dashboard.py")
 
 
 def main():
@@ -35,8 +35,9 @@ def main():
     if st.button("← Back", type="tertiary"):
         st.session_state.pop("role", None)
         st.session_state.pop("authenticated", None)
-        st.rerun()
+        st.switch_page("pages/0_Home.py")
     
+
     with st.form("login_view", clear_on_submit=False, enter_to_submit=True, border=True):
         st.subheader("Hello there 👋")
         st.write("Login with your school account to continue.")

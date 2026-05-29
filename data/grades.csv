@@ -1,4 +1,18 @@
-id,grade_value
-2025-00001,1.5
-2025-00003,1.6
-2025-05910,1.0
+student_id,semester,subject,grade
+2025-01234,1st Semester,Discrete Structures,1.2
+2025-01234,1st Semester,Computer Programming 1,1.5
+2025-01234,1st Semester,CWTS,1.2
+2025-01234,1st Semester,Information Technology Fundementals,1.4
+2025-01234,1st Semester,Understanding the Self,1.4
+2025-01234,1st Semester,General Elective 1,1.8
+2025-01234,1st Semester,PATHFIT 1,1.7
+2025-01234,1st Semester,Ethics,1.9
+2025-01234,1st Semester,Purposive Communication,1.9
+2025-01234,2nd Semester,Statistics and Probability,2.1
+2025-01234,2nd Semester,CWTS,1.2
+2025-01234,2nd Semester,Computer Programming 2,1.5
+2025-01234,2nd Semester,Life and Works of Rizal,1.3
+2025-01234,2nd Semester,Readings in Philippine History,1.2
+2025-01234,2nd Semester,Exercise-Based Fitness Activity,1.4
+2025-01234,2nd Semester,Human Computer Interaction,1.3
+2025-01234,2nd Semester,General Education Electives,1.3

@@ -26,7 +26,7 @@ from src.utils.file_handler import (YEAR_LEVELS, load_students_dataframe)
 
 STUDENTS_CSV = PROJECT_ROOT /"data"/"students.csv"
 
-if st.session.get("role") != "student":
+if st.session_state.get("role") != "student":
     st.switch_page("pages/0_Home.py")
 
 with st.sidebar:
@@ -48,7 +48,7 @@ def find_student(student_id: str, name: str, course: str, year_level: str) -> St
     return None
 
 if st.button("Back", type="tertiary"):
-    st.session.pop("role", None)
+    st.session_state.pop("role", None)
     st.switch_page("pages/0_Home.py")
 
 st.markdown(
@@ -98,7 +98,7 @@ with st.form("student_lookup_form", border=True):
 
 if submitted:
     if not student_id.strip() or not name.strip():
-        st.error("⚠️ Please fill in all fields.", icon="⚠️")
+        st.error("Please fill in all fields.", icon="⚠️")
 
     else:
         with st.spinner("Searching for your record..."):
