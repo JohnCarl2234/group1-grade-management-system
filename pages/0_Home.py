@@ -12,12 +12,6 @@ Student  ->        pages/2_Student_Form_Matching    (identity form)    *not yet 
 
 import streamlit as st
 
-st.set_page_config(
-    page_title="Grade Management System",
-    layout="centered",
-    initial_sidebar_state="collapsed"
-)
-
 # Sidebar - contains the information about the app
 with st.sidebar:
     st.title("ℹ️ About")
