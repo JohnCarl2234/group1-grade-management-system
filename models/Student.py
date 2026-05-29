@@ -47,6 +47,3 @@ class Student:
     def __str__(self) -> str:
         return f"{self.name.capitalize()} ({self.student_id}) — {self.course.upper()}, {self.year_level}"
     
-s1 = Student("01938", "skfls", "jadka", "jadfla")
-    
-print(s1)
