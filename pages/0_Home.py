@@ -12,6 +12,12 @@ Student  ->        pages/2_Student_Form_Matching    (identity form)    *not yet 
 
 import streamlit as st
 
+st.set_page_config(
+    page_title="Grade Management System",
+    layout="centered",
+    initial_sidebar_state="collapsed",
+)
+
 # Sidebar - contains the information about the app
 with st.sidebar:
     st.title("ℹ️ About")
@@ -75,7 +81,7 @@ with col1:
         st.session_state.pop("current_student", None)
         st.session_state.pop("authenticated", None)
         st.session_state.role = "admin"
-        st.switch_page("pages/3_Login.py")
+        st.rerun()
 
 with col2:
     st.markdown(
@@ -89,7 +95,7 @@ with col2:
         st.session_state.pop("current_student", None)
         st.session_state.pop("authenticated", None)
         st.session_state.role = "student"
-        st.switch_page("pages/2_Student_Lookup.py")
+        st.rerun()
  
 # Footer - contains the copyright text
 st.markdown(

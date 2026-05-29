@@ -31,6 +31,11 @@ def main():
         st.caption("© 2025 Grade Management System")
     
     st.title("Grade Management System")
+
+    if st.button("← Back", type="tertiary"):
+        st.session_state.pop("role", None)
+        st.session_state.pop("authenticated", None)
+        st.rerun()
     
     with st.form("login_view", clear_on_submit=False, enter_to_submit=True, border=True):
         st.subheader("Hello there 👋")

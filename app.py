@@ -55,3 +55,4 @@ else:
 
 pg = st.navigation(pages, position="hidden")  # hidden = no sidebar nav shown
 pg.run()
+
