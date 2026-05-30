@@ -28,7 +28,21 @@ with st.sidebar:
     st.write("👨‍🎓 Student — enter your info to view your grades")
     st.divider()
     st.caption("© 2025 Grade Management System")
-
+st.markdown("""
+ <style>
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {
+    background: linear-gradient(175deg, #0F1E3C 0%, #1B3468 60%, #22407A 100%) !important;
+}
+[data-testid="stSidebar"] * { color: #C8D8F0 !important; }
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 { color: #ffffff !important; }
+[data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.12) !important; }
+ 
+hr { border-color: #D0D9E8 !important; }
+</style>
+""", unsafe_allow_html=True)
 st.markdown("""
             <style>
 
@@ -48,8 +62,10 @@ st.markdown("""
             }
 
             </style>
+
 """,
 unsafe_allow_html=True
+
 )
 
 # Header - Just like the title and its corresponding subheaders

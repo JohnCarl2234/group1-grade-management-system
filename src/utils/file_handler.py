@@ -26,11 +26,11 @@ VALID_GRADES = Grades.VALID_GRADES
 # Keep internal names stable (used in code and storage) and change the display
 # strings here to customize table headers without touching business logic.
 DASHBOARD_DISPLAY_COLUMNS = {
-    "student_id": ":material/id_card: ID Number",
-    "name": ":material/school: Students",
-    "status": ":material/info: Enrollment Status",
-    "year_level": ":material/calendar_month: Year Level",
-    "course": ":material/book_5: Course",
+    "student_id": "ID Number",
+    "name": "Students",
+    "status": "Enrollment Status",
+    "year_level": "Year Level",
+    "course": "Course",
 }
 
 
