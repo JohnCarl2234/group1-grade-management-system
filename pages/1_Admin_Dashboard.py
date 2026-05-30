@@ -203,7 +203,7 @@ with student_manager:
  
     # Get existing grades if editing
     current_grades = get_student_grades(GRADES_CSV, selected_id) if selected_id else []
- 
+
     # ── Upsert form ───────────────────────────────────────────────────────────
     with st.form("student_upsert_form"):
         st.subheader("Student Information")
@@ -271,24 +271,13 @@ with student_manager:
                     # Pre-select current grade if editing, otherwise default to first option
                     grade_options = ["— No grade yet —"] + [str(g) for g in VALID_GRADES]
                     current_val   = str(existing_grade.grade) if existing_grade else "— No grade yet —"
-
-                    existing_grade = next(
-                        (g for g in current_grades
-                        if g.semester == sem and g.subject == subject),
-                        None
-                    )
-
-                    # ADD THIS TEMPORARILY
-                    if existing_grade:
-                        st.write(f"DEBUG: {subject} → grade={existing_grade.grade}, str={str(existing_grade.grade)}, in options={str(existing_grade.grade) in grade_options}")
-
                     default_idx   = grade_options.index(current_val) if current_val in grade_options else 0
  
                     grade_inputs[sem][subject] = st.selectbox(
                         subject,
                         options=grade_options,
                         index=default_idx,
-                        key=f"grade_{sem}_{subject}",
+                        key=f"grade_{selected_id}_{sem}_{subject}",
                     )
  
         save_submitted = st.form_submit_button("💾 Save Student", use_container_width=True)
