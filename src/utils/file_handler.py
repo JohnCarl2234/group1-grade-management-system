@@ -194,7 +194,7 @@ def upsert_student_record(
         for semester, subjects in grades.items():
             for subject, grade_val in subjects.items():
                 # Skip empty or placeholder values
-                if grade_val and grade_val != "— No grade yet —":
+                if grade_val and grade_val != "No grade yet":
                     # Build a Grade object — this validates the data
                     grade_obj = Grades(
                         student_id=student_id,

@@ -136,48 +136,67 @@ with students_table:
         )
  
         if selected_name != "Select a student":
-           
             sid = data[data["name"] == selected_name]["student_id"].values[0]
- 
-         
-            all_grades = get_student_grades(GRADES_CSV, sid)
- 
-            if not all_grades:
-                st.warning("No grades recorded for this student yet.")
-            else:
-                all_averages = []
- 
-                for sem in SEMESTERS:
-                    # Filter grades by semester
-                    sem_grades = get_student_grades_by_semester(GRADES_CSV, sid, sem)
-                    st.markdown(f"**📅 {sem}**")
- 
-                    if not sem_grades:
-                        st.caption("No grades for this semester.")
-                        continue
- 
-                    display_rows = [{
-                        "Subject":     g.subject,
-                        "Grade":       g.grade,
-                        "Description": g.description,
-                        "Remarks":     g.remarks,
-                    } for g in sem_grades]
- 
-                    st.dataframe(
-                        pd.DataFrame(display_rows),
-                        hide_index=True,
-                        use_container_width=True,
-                    )
- 
-                    # Compute semester average using Grade.compute_average()
+
+            
+            selected_record  = get_student_record(STUDENTS_CSV, GRADES_CSV, sid)
+            course_subjects  = SUBJECTS.get(
+                selected_record.course      if selected_record else "", {}
+            ).get(
+                selected_record.year_level  if selected_record else "", {}
+            )
+
+            all_averages = []
+
+            for sem in SEMESTERS:
+                st.markdown(f"**📅 {sem}**")
+
+                subjects_for_sem = course_subjects.get(sem, [])
+                sem_grades       = get_student_grades_by_semester(GRADES_CSV, sid, sem)
+
+                
+                grades_lookup = {g.subject: g for g in sem_grades}
+
+                if not subjects_for_sem:
+                    st.caption(f"No subjects defined yet.")
+                    continue
+
+                
+                display_rows = []
+                for subject in subjects_for_sem:
+                    grade_obj = grades_lookup.get(subject)
+                    if grade_obj:
+                        display_rows.append({
+                            "Subject":     subject,
+                            "Grade":       grade_obj.grade,
+                            "Description": grade_obj.description,
+                            "Remarks":     grade_obj.remarks,
+                        })
+                    else:
+                        display_rows.append({
+                            "Subject":     subject,
+                            "Grade":       "—",
+                            "Description": "—",
+                            "Remarks":     "Not yet graded",
+                        })
+
+                st.dataframe(
+                    pd.DataFrame(display_rows),
+                    hide_index=True,
+                    use_container_width=True,
+                )
+
+                
+                if sem_grades:
                     avg = compute_average(sem_grades)
                     all_averages.append(avg)
                     st.info(f"**{sem} Average: {avg} — {get_remarks(avg)}**")
- 
-                # Overall average
-                if all_averages:
-                    overall = round(sum(all_averages) / len(all_averages), 2)
-                    st.success(f"🎓 **Overall Average: {overall} — {get_remarks(overall)}**")
+                else:
+                    st.warning(f"No grades recorded for {sem} yet.")
+
+            if all_averages:
+                overall = round(sum(all_averages) / len(all_averages), 2)
+                st.success(f"🎓 **Overall Average: {overall} — {get_remarks(overall)}**")
  
  
 # ══════════════════════════════════════════════════════════════════════════════

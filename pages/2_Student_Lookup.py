@@ -72,7 +72,7 @@ with st.form("student_lookup_form", border=True):
 
     name = st.text_input(
         "Full Name",
-        placeholder="e.g. Dela Cruz, Juan G.",
+        placeholder="e.g. Arizo, Rishelvin C.",
         help="Enter your full name, surname first then first name and middle initial"
     )
 
