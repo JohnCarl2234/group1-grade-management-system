@@ -131,11 +131,11 @@ with students_table:
  
         selected_name = st.selectbox(
             "Select a student to view grades",
-            ["— Select a student —"] + data["name"].dropna().astype(str).tolist(),
+            ["Select a student"] + data["name"].dropna().astype(str).tolist(),
             key="grade_view_select",
         )
  
-        if selected_name != "— Select a student —":
+        if selected_name != "Select a student":
            
             sid = data[data["name"] == selected_name]["student_id"].values[0]
  
@@ -156,8 +156,6 @@ with students_table:
                         st.caption("No grades for this semester.")
                         continue
  
-                    # Build display dataframe from Grade objects
-                    # Using Grade object properties: .subject, .grade, .description, .remarks
                     display_rows = [{
                         "Subject":     g.subject,
                         "Grade":       g.grade,
@@ -189,7 +187,6 @@ with students_table:
 with student_manager:
     st.header("Manage students")
  
-    # ── Select existing student to edit ──────────────────────────────────────
     existing_ids = data["student_id"].dropna().astype(str).tolist()
     selected_id  = st.selectbox(
         "Search existing student by ID to edit :material/edit:",
@@ -197,29 +194,28 @@ with student_manager:
         key="edit_select",
     )
  
-    # If a student is selected, fetch their record as a Student object
-    # get_student_record() now returns a Student object, not a dict
+
     current_record = get_student_record(STUDENTS_CSV, GRADES_CSV, selected_id) if selected_id else None
  
-    # Get existing grades if editing
+
     current_grades = get_student_grades(GRADES_CSV, selected_id) if selected_id else []
 
-    # ── Upsert form ───────────────────────────────────────────────────────────
+  
     with st.form("student_upsert_form"):
         st.subheader("Student Information")
  
         c1, c2 = st.columns(2)
  
-        # Pre-fill fields if editing an existing student
-        # Note: current_record is now a Student object so use .id, .name etc.
-        # not current_record["id"] like before
+
         student_id = c1.text_input(
             "ID Number",
             value=current_record.student_id if current_record is not None else "",
+            placeholder="e.g. 2025-01234",
         )
         name = c2.text_input(
             "Student Name",
             value=current_record.name if current_record is not None else "",
+            placeholder="e.g. Arizo, Rishelvin C.",
         )
         course = c1.selectbox(
             "Course",
@@ -243,12 +239,10 @@ with student_manager:
         st.subheader("Grades")
         st.caption("Subjects are loaded automatically based on the selected course and year level.")
  
-        # ── Grade inputs ──────────────────────────────────────────────────────
-        # Build grade input dict: { semester: { subject: grade_value } }
+  
         grade_inputs: dict[str, dict[str, str]] = {}
  
-        # Get subjects for the selected course and year level from subjects.py
-        # Falls back to empty dict if course/year combination not found yet
+
         course_subjects = SUBJECTS.get(course, {}).get(year_level, {})
  
         for sem in SEMESTERS:
@@ -261,16 +255,15 @@ with student_manager:
                     continue
  
                 for subject in subjects_for_sem:
-                    # Check if this student already has a grade for this subject
+                   
                     existing_grade = next(
                         (g for g in current_grades
                          if g.semester == sem and g.subject == subject),
                         None
                     )
  
-                    # Pre-select current grade if editing, otherwise default to first option
-                    grade_options = ["— No grade yet —"] + [str(g) for g in VALID_GRADES]
-                    current_val   = str(existing_grade.grade) if existing_grade else "— No grade yet —"
+                    grade_options = ["No grade yet"] + [str(g) for g in VALID_GRADES]
+                    current_val   = str(existing_grade.grade) if existing_grade else "No grade yet"
                     default_idx   = grade_options.index(current_val) if current_val in grade_options else 0
  
                     grade_inputs[sem][subject] = st.selectbox(
@@ -301,7 +294,7 @@ with student_manager:
  
     st.divider()
  
-    # ── Delete form ───────────────────────────────────────────────────────────
+
     with st.form("student_delete_form"):
         st.subheader("Delete Student")
         delete_id = st.selectbox(
@@ -320,8 +313,7 @@ with student_manager:
         elif not delete_id.strip().startswith("20"):
             st.error('😢 Student ID should have this format: "20xx-xxxxx"')
         else:
-            # get_student_record() returns a Student object
-            # so use .name not ["name"]
+           
             delete_record = get_student_record(STUDENTS_CSV, GRADES_CSV, delete_id.strip())
             delete_name   = delete_record.name if delete_record is not None else delete_id.strip()
 
