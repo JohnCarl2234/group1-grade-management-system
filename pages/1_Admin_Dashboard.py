@@ -454,7 +454,7 @@ with student_manager:
 
     existing_ids = data["student_id"].dropna().astype(str).tolist()
     selected_id  = st.selectbox(
-        "Search existing student by ID to edit :material/edit:",
+        "Search existing student by ID to edit",
         [""] + existing_ids,
         key="edit_select",
     )
