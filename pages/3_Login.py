@@ -73,12 +73,12 @@ hr { border-color: #D0D9E8 !important; }
         
         if submit_button:
             # Basic validation to check for empty fields before attempting Firebase authentication
-            if not username.strip() or not password:
+            if not username.strip() or not password.strip():
                 st.error("Empty fields, please try again.", icon="🫠")
                 return False
 
             # Attempt to authenticate with Firebase
-            auth_result = sign_in_with_firebase(username, password)
+            auth_result = sign_in_with_firebase(username.strip(), password.strip())
 
             if auth_result.get("success"):
                 st.success("Logging in...", icon="🪵")
