@@ -8,7 +8,7 @@ SUBJECTS = {
             "1st Semester": [
             "Discrete Structures",
             "Computer Programming 1", 
-            "CWTS",
+            "NSTP (CWTS/ROTC)",
             "Information Technology Fundementals", 
             "Understanding the Self",
             "General Elective 1",
@@ -18,7 +18,7 @@ SUBJECTS = {
         ],
         "2nd Semester": [
             "Statistics and Probability", 
-            "CWTS",
+            "NSTP (CWTS/ROTC)",
             "Computer Programming 2",
             "Life and Works of Rizal",
             "Readings in Philippine History",
