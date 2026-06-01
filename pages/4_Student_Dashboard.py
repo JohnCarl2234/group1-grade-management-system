@@ -1,3 +1,5 @@
+"""Student Dashboard page for the Grade Management System."""
+
 from pathlib import Path
 import sys
 import time
@@ -5,16 +7,19 @@ import time
 import pandas as pd
 import streamlit as st
 
+# Page configuration
 st.set_page_config(
     page_title="Student Dashboard - Grade Management System",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
+# Path setup for imports
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+# Imports after path setup
 from data.Subjects import SUBJECTS
 from src.utils.file_handler import (
     SEMESTERS,
@@ -24,12 +29,17 @@ from src.utils.file_handler import (
     get_student_grades_by_semester
 )
 
+# Prevent students from navigating here directly via the URL without first
 if st.session_state.get("role") != "student" or "current_student" not in st.session_state:
     st.switch_page("pages/2_Student_Lookup.py")
 
+# Paths to data files
 GRADES_CSV = PROJECT_ROOT / "data" / "grades.csv"
+
+# Get the current student record from session state
 student = st.session_state.current_student
 
+# CSS styles for the dashboard
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -188,22 +198,22 @@ hr { border-color: #E2E8F0 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
+# Sidebar
 with st.sidebar:
     st.markdown("### ℹ️ About")
     st.write("A streamlined platform for educators to manage student records and grades.")
     st.divider()
     st.caption("© 2025 Grade Management System · Group 1")
 
-# ── Back button ───────────────────────────────────────────────────────────────
+# Back button 
 if st.button("← Back", type="tertiary"):
     st.session_state.pop("current_student", None)
     st.switch_page("pages/2_Student_Lookup.py")
 
-# ── Page Title ────────────────────────────────────────────────────────────────
+# Page Title 
 st.title("📋 My Grade Report")
 
-# ── Student Info Cards ────────────────────────────────────────────────────────
+# Student Info Cards 
 c1, c2, c3, c4 = st.columns(4)
 with c1:
     st.markdown(f"""
@@ -237,7 +247,7 @@ with c4:
 st.markdown("<br>", unsafe_allow_html=True)
 st.divider()
 
-# ── Grade Tables ──────────────────────────────────────────────────────────────
+# Grade Tables 
 course_subjects = SUBJECTS.get(student.course, {}).get(student.year_level, {})
 all_averages = []
 
@@ -286,7 +296,7 @@ for sem in SEMESTERS:
 
     st.divider()
 
-# ── Overall Standing ──────────────────────────────────────────────────────────
+# Overall Standing
 if all_averages:
     overall      = round(sum(all_averages) / len(all_averages), 2)
     overall_desc = get_grade_description(overall)
@@ -311,6 +321,7 @@ if all_averages:
             </div>
         """, unsafe_allow_html=True)
     with m3:
+        # Color the standing card green if passing, red if failing
         color = "green" if passed else "red"
         standing = "Passed ✓" if passed else "Failed ✗"
         st.markdown(f"""
@@ -322,13 +333,16 @@ if all_averages:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
+    # Final remarks based on overall standing
     if passed:
         st.success("🎉 Congratulations! You are passing all your subjects.")
     else:
         st.error("❗ You are currently failing. Please coordinate with your adviser.")
 
 else:
+    # No grades recorded at all
     st.info("No grades have been recorded for your account yet. Please contact your professor for further instructions.")
 
+# Footer note
 st.markdown("<br>", unsafe_allow_html=True)
 st.caption("📌 This is a read-only view. If you believe there is an error in your grades, please contact your teacher.")

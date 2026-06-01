@@ -12,6 +12,7 @@ Student  ->        pages/2_Student_Form_Matching    (identity form)    *not yet 
 
 import streamlit as st
 
+# Page configuration
 st.set_page_config(
     page_title="Grade Management System",
     layout="centered",
@@ -28,6 +29,8 @@ with st.sidebar:
     st.write("👨‍🎓 Student — enter your info to view your grades")
     st.divider()
     st.caption("© 2025 Grade Management System")
+
+#CSS design for the sidebar and the role selection buttons
 st.markdown("""
  <style>
 /* ── Sidebar ── */

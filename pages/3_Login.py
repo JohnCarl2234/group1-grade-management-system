@@ -15,10 +15,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from auth import check_authentication, set_authenticated, sign_in_with_firebase
 
-
+# If the user is already authenticated, redirect to the admin dashboard
 if check_authentication():
     st.switch_page("pages/1_Admin_Dashboard.py")
-
 
 def main():
     """Render login form."""
@@ -46,14 +45,16 @@ hr { border-color: #D0D9E8 !important; }
 </style>
 """, unsafe_allow_html=True)
     
+    # Page title
     st.title("Grade Management System")
 
+    # Back button
     if st.button("← Back", type="tertiary"):
         st.session_state.pop("role", None)
         st.session_state.pop("authenticated", None)
         st.switch_page("pages/0_Home.py")
     
-
+    # Login form
     with st.form("login_view", clear_on_submit=False, enter_to_submit=True, border=True):
         st.subheader("Hello there 👋")
         st.write("Login with your school account to continue.")
@@ -71,10 +72,12 @@ hr { border-color: #D0D9E8 !important; }
         submit_button = st.form_submit_button(label='Login')
         
         if submit_button:
+            # Basic validation to check for empty fields before attempting Firebase authentication
             if not username.strip() or not password:
                 st.error("Empty fields, please try again.", icon="🫠")
                 return False
 
+            # Attempt to authenticate with Firebase
             auth_result = sign_in_with_firebase(username, password)
 
             if auth_result.get("success"):

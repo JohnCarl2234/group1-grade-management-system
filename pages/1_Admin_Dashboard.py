@@ -1,3 +1,8 @@
+""""
+Admin Dashboard page for the Grade Management System.
+This is the main admin interface for managing student records and grades.
+"""
+
 from pathlib import Path
 import sys
 import time
@@ -5,19 +10,20 @@ import time
 import pandas as pd
 import streamlit as st
 
-
+#Page Configuration
 st.set_page_config(
     page_title="Admin Dashboard - Grade Management System",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-
+#Project Root Setup
+#Resolve the project root so we can import from sibling directories
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-
+#Imports
 from auth import check_authentication, logout
 from data.Subjects import SUBJECTS
 from src.utils.file_handler import (
@@ -36,16 +42,16 @@ from src.utils.file_handler import (
     upsert_student_record,
 )
 
-
+# Access Control: Only allow admins who are authenticated to view this page
 if st.session_state.get("role") != "admin" or not check_authentication():
     st.switch_page("pages/0_Home.py")
 
-
+#CVS file paths
 STUDENTS_CSV = PROJECT_ROOT / "data" / "students.csv"
 GRADES_CSV   = PROJECT_ROOT / "data" / "grades.csv"
 
 
-# ── Styling ──────────────────────────────────────────────────────────────────
+# Styling
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
@@ -308,7 +314,7 @@ body:has(.stModalContainer:not([style*="display: none"]))::before {
 """, unsafe_allow_html=True)
 
 
-# ── Sidebar ──────────────────────────────────────────────────────────────────
+# Sidebar 
 with st.sidebar:
     st.markdown("### 👋 Welcome back!")
     st.markdown(f"Logged in as:")
@@ -322,15 +328,16 @@ with st.sidebar:
         st.switch_page("pages/0_Home.py")
 
 
-# ── Title ────────────────────────────────────────────────────────────────────
+#  Title 
 st.title("📊 Student Grade Dashboard")
 
+#Main Tabs
 students_table, student_manager = st.tabs([
     "Students Table",
     "Students Manager",
 ])
 
-
+#Load Student Data
 data = load_dashboard_dataframe(STUDENTS_CSV, GRADES_CSV)
 
 
@@ -343,11 +350,12 @@ with students_table:
     if data.empty:
         st.info("No students in the database yet. Add one using the Students Manager tab.")
     else:
-        # ── Metric Cards ─────────────────────────────────────────────────────
-        total          = len(data)
+        # Enrollment Metric Cards 
+        total = len(data)
         enrolled_count = len(data[data["status"] == "Enrolled"]) if "status" in data.columns else 0
+        not_enrolled   = total - enrolled_count
 
-        c1, = st.columns(1)
+        c1, c2, c3 = st.columns(3)
         with c1:
             st.markdown(f"""
                 <div class="metric-card blue">
@@ -356,12 +364,26 @@ with students_table:
                     <div class="sub">in the database</div>
                 </div>
             """, unsafe_allow_html=True)
+        with c2:
+            st.markdown(f"""
+        <div class="metric-card green">
+                <div class="label">Enrolled</div>
+                <div class="value">{enrolled_count}</div>
+                <div class="sub">currently active</div>
+        </div>
+            """, unsafe_allow_html=True)
+        with c3:
+            st.markdown(f"""
+        <div class="metric-card red">
+                <div class="label">Not Enrolled</div>
+                <div class="value">{not_enrolled}</div>
+                <div class="sub">inactive students</div>
+        </div>
+            """, unsafe_allow_html=True)
        
-
-
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # ── Search ───────────────────────────────────────────────────────────
+        # Search Bar
         st.selectbox(
             "Search Enrolled Students",
             [""] + data["name"].dropna().astype(str).tolist(),
@@ -369,18 +391,18 @@ with students_table:
             key="student_search",
         )
 
-        # ── Table ────────────────────────────────────────────────────────────
+        #  Student Records Table
         st.dataframe(
             data,
             use_container_width=True,
             hide_index=True,
         )
 
-
-        # ── Grade Report ─────────────────────────────────────────────────────
+        # Grade Report 
         st.divider()
         st.subheader("📊 View Student Grade Report")
 
+        # Get student ID from the selected name
         selected_name = st.selectbox(
             "Select a student to view grades",
             ["Select a student"] + data["name"].dropna().astype(str).tolist(),
@@ -390,6 +412,7 @@ with students_table:
         if selected_name != "Select a student":
             sid = data[data["name"] == selected_name]["student_id"].values[0]
 
+        # Fetch full student record to get course and year level
             selected_record = get_student_record(STUDENTS_CSV, GRADES_CSV, sid)
             course_subjects = SUBJECTS.get(
                 selected_record.course     if selected_record else "", {}
@@ -399,6 +422,7 @@ with students_table:
 
             all_averages = []
 
+        # Display grades per semester
             for sem in SEMESTERS:
                 st.markdown(f"**📅 {sem}**")
 
@@ -452,6 +476,7 @@ with students_table:
 with student_manager:
     st.header("Manage students")
 
+# Select Existing Student to Edit 
     existing_ids = data["student_id"].dropna().astype(str).tolist()
     selected_id  = st.selectbox(
         "Search existing student by ID to edit",
@@ -459,14 +484,17 @@ with student_manager:
         key="edit_select",
     )
 
+# Pre-load existing record and grades if editing
     current_record = get_student_record(STUDENTS_CSV, GRADES_CSV, selected_id) if selected_id else None
     current_grades = get_student_grades(GRADES_CSV, selected_id) if selected_id else []
 
+# Student Form (CREATE / UPDATE)
     with st.form("student_upsert_form"):
         st.subheader("Student Information")
 
         c1, c2 = st.columns(2)
 
+# ID Number, Name, Course, Year Level, Enrollment Status
         student_id = c1.text_input(
             "ID Number",
             value=current_record.student_id if current_record is not None else "",
@@ -499,6 +527,7 @@ with student_manager:
         st.subheader("Grades")
         st.caption("Subjects are loaded automatically based on the selected course and year level.")
 
+        # Grade Inputs
         grade_inputs: dict[str, dict[str, str]] = {}
         course_subjects = SUBJECTS.get(course, {}).get(year_level, {})
 
@@ -511,6 +540,7 @@ with student_manager:
                     st.caption(f"No subjects defined for {course} {year_level} {sem} yet.")
                     continue
 
+        # Check if a grade already exists for this subject
                 for subject in subjects_for_sem:
                     existing_grade = next(
                         (g for g in current_grades
@@ -531,6 +561,7 @@ with student_manager:
 
         save_submitted = st.form_submit_button("💾 Save Student", use_container_width=True)
 
+        # Save Handler: Validate and upsert student record and grades
     if save_submitted:
         if not student_id.strip():
             st.error("Student ID is required.")
@@ -551,6 +582,7 @@ with student_manager:
 
     st.divider()
 
+        # Delete Student Record
     with st.form("student_delete_form"):
         st.subheader("Delete Student")
         delete_id = st.selectbox(
@@ -563,6 +595,7 @@ with student_manager:
             use_container_width=True,
         )
 
+        # Delete Handler: Validate and delete student record and grades
     if delete_submitted:
         if not delete_id.strip():
             st.error("😢 Please select a student to delete.")
