@@ -28,7 +28,7 @@ with st.sidebar:
     st.write("👨‍🏫 Admin   — log in to manage students and grades")
     st.write("👨‍🎓 Student — enter your info to view your grades")
     st.divider()
-    st.caption("© 2025 Grade Management System")
+    st.caption("© 2026 Grade Management System")
 
 #CSS design for the sidebar and the role selection buttons
 st.markdown("""

@@ -41,7 +41,7 @@ with st.sidebar:
     st.write("Grade Management System")
     st.write("A streamlined platform for educators to manage student records and grades.")
     st.divider()
-    st.caption("© 2025 Grade Management System · Group 1")
+    st.caption("© 2026 Grade Management System · Group 1")
 
 #Sidebar design
     st.markdown("""

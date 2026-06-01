@@ -27,7 +27,7 @@ def main():
         st.write("Grade Management System")
         st.write("A streamlined platform for educators to manage student records and grades.")
         st.divider()
-        st.caption("© 2025 Grade Management System")
+        st.caption("© 2026 Grade Management System")
 
         st.markdown("""
  <style>
