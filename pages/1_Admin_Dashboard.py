@@ -479,8 +479,8 @@ with student_manager:
 # Select Existing Student to Edit 
     existing_ids = data["student_id"].dropna().astype(str).tolist()
     selected_id  = st.selectbox(
-        "Search existing student by ID to edit",
-        [""] + existing_ids,
+        "Search existing student by ID to edit or add a new student",
+        ["Add new student"] + existing_ids,
         key="edit_select",
     )
 
