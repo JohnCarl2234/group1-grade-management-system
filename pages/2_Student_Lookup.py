@@ -15,10 +15,12 @@ import streamlit as st
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
+head_path = "./app/static/mascot.png"
 # Page configuration
 st.set_page_config(
     page_title="Student Lookup - Grade Management System", 
     layout="centered",
+    page_icon = head_path,
     initial_sidebar_state="expanded"
 )
 

@@ -7,10 +7,12 @@ import time
 import pandas as pd
 import streamlit as st
 
+head_path = "./app/static/mascot.png"
 # Page configuration
 st.set_page_config(
     page_title="Student Dashboard - Grade Management System",
     layout="wide",
+    page_icon = head_path,
     initial_sidebar_state="collapsed",
 )
 

@@ -1,12 +1,21 @@
 [theme]
-primaryColor = "#FF6B6B"
-backgroundColor = "#FFFFFF"
+primaryColor = "#101572"
+backgroundColor = "#edeef5"
 secondaryBackgroundColor = "#F0F2F6"
-textColor = "#31333F"
-font = "sans serif"
+textColor = "#25262b"
+font = "Google Sans, sans serif"
 
 [client]
 showErrorDetails = true
 
+[[theme.fontFaces]]
+family = "Google Sans"
+src = "url(https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap)"
+weightRange = 400
+style = "normal"
+
 [logger]
 level = "info"
+
+[server]
+enableStaticServing = true

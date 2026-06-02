@@ -7,6 +7,20 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+st.markdown(
+    """
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
+    <style>
+    html, body, [class*="css"] {
+        font-family: 'Google Sans', sans-serif !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+logo = "./app/static/mascot.png"
+
 pages = [
     st.Page("pages/0_Home.py",              title="Home",           icon=":material/home:",     default=True),
     st.Page("pages/3_Login.py",             title="Admin Login",    icon=":material/login:"),
@@ -17,4 +31,3 @@ pages = [
 
 pg = st.navigation(pages, position="hidden")  # hidden = no sidebar nav shown
 pg.run()
-

@@ -4,9 +4,11 @@ import sys
 import time
 from pathlib import Path
 
+head_path = "./app/static/mascot.png"
 # Set page config
 st.set_page_config(
     page_title="Login - Grade Management System",
+    page_icon = head_path,
     layout="centered"
 )
 

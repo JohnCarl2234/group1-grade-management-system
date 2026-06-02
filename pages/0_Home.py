@@ -11,11 +11,15 @@ Student  ->        pages/2_Student_Form_Matching    (identity form)    *not yet 
 """
 
 import streamlit as st
+from PIL import Image
+
+head_path = "./app/static/mascot.png"
 
 # Page configuration
 st.set_page_config(
     page_title="Grade Management System",
     layout="centered",
+    page_icon = head_path,
     initial_sidebar_state="collapsed",
 )
 
@@ -72,12 +76,21 @@ unsafe_allow_html=True
 )
 
 # Header - Just like the title and its corresponding subheaders
+logo_path = "./app/static/logo.png"
 st.markdown(
-    "<h1 style='text-align:center; margin-bottom:1px'>🎓 Grade Management System</h1>",
+    f"""
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+        <img src="{logo_path}" width="680vw" style="max-height: 70px; object-fit: contain;">
+    </div>
+    """,
     unsafe_allow_html=True
 )
 st.markdown(
-    "<p style='text-align:center; color:gray; margin-bottom:2rem'>Eastern Visayas State University</p>",
+    "<h1 style='text-align:center; margin-bottom:1px'>Grade Management System</h1>",
+    unsafe_allow_html=True
+)
+st.markdown(
+    "<p style='text-align:center; color:gray; margin-bottom:2rem'>Eastern Visayas State University - Information Technology Department</p>",
     unsafe_allow_html=True
 )
 st.markdown(
@@ -119,6 +132,6 @@ with col2:
 # Footer - contains the copyright text
 st.markdown(
     "<br><hr><p style='text-align:center; color:lightgray; font-size:0.75rem'>"
-    "© 2025 Grade Management System · Group 1</p>",
+    "© 2026 Grade Management System · Group 1</p>",
     unsafe_allow_html=True
 )

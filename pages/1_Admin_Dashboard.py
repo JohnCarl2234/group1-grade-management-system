@@ -10,10 +10,13 @@ import time
 import pandas as pd
 import streamlit as st
 
+head_path = "./app/static/mascot.png"
+
 #Page Configuration
 st.set_page_config(
     page_title="Admin Dashboard - Grade Management System",
     layout="wide",
+    page_icon = head_path,
     initial_sidebar_state="expanded",
 )
 
