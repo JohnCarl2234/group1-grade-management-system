@@ -126,7 +126,7 @@ with st.form("student_lookup_form", border=True):
 
     submitted = st.form_submit_button(
         "🔍 Find My Record",
-        use_container_width=True,
+        width='stretch',
         type="primary"
     )
 

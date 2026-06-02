@@ -115,7 +115,7 @@ with col1:
         "Manage students, grades,<br>and records</p>",
         unsafe_allow_html=True
     )
-    if st.button("Admin", use_container_width=True, type="primary", key="btn_admin"):
+    if st.button("Admin", width='stretch', type="primary", key="btn_admin"):
         # Clear any leftover state from a previous session
         st.session_state.pop("current_student", None)
         st.session_state.pop("authenticated", None)
@@ -129,7 +129,7 @@ with col2:
         "View your grades<br>and academic record</p>",
         unsafe_allow_html=True
     )
-    if st.button("Student", use_container_width=True, type="primary", key="btn_student"):
+    if st.button("Student", width='stretch', type="primary", key="btn_student"):
         # Clear any leftover state from a previous session
         st.session_state.pop("current_student", None)
         st.session_state.pop("authenticated", None)

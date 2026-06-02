@@ -323,7 +323,7 @@ with st.sidebar:
     st.markdown(f"Logged in as:")
     st.markdown(f"**{st.session_state.get('user_email', 'Unknown')}**")
     st.divider()
-    if st.button("🚪 Logout", use_container_width=True):
+    if st.button("🚪 Logout", width="stretch"):
         st.toast("Logging out...", icon="👋")
         time.sleep(2.0)
         logout()
@@ -407,7 +407,7 @@ with students_table:
         #  Student Records Table
         st.dataframe(
             data,
-            use_container_width=True,
+            width='stretch',
             hide_index=True,
         )
 
@@ -468,7 +468,7 @@ with students_table:
                 st.dataframe(
                     pd.DataFrame(display_rows),
                     hide_index=True,
-                    use_container_width=True,
+                    width='stretch',
                 )
 
                 if sem_grades:
@@ -572,7 +572,7 @@ with student_manager:
                         key=f"grade_{selected_id}_{sem}_{subject}",
                     )
 
-        save_submitted = st.form_submit_button("💾 Save Student", use_container_width=True)
+        save_submitted = st.form_submit_button("💾 Save Student", width='stretch')
 
         # Save Handler: Validate and upsert student record and grades
     if save_submitted:
@@ -605,7 +605,7 @@ with student_manager:
         )
         delete_submitted = st.form_submit_button(
             "🗑️ Delete Student",
-            use_container_width=True,
+            width='stretch',
         )
 
         # Delete Handler: Validate and delete student record and grades

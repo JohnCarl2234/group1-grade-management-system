@@ -294,7 +294,7 @@ for sem in SEMESTERS:
     st.dataframe(
         pd.DataFrame(display_rows),
         hide_index=True,
-        use_container_width=True,
+        width='stretch',
     )
 
     graded_subjects = [g for g in recorded_grades]
