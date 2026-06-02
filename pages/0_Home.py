@@ -87,7 +87,7 @@ logo_path = "./app/static/logo.png"
 st.markdown(
     f"""
     <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-        <img src="{logo_path}" width="680vw" style="max-height: 70px; object-fit: contain;">
+        <img src="{logo_path}" width="676vw" style="max-height: 70px; object-fit: contain;">
     </div>
     """,
     unsafe_allow_html=True
