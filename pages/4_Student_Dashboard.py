@@ -7,19 +7,20 @@ import time
 import pandas as pd
 import streamlit as st
 
-head_path = "./app/static/mascot.png"
+# Resolve project root and import shared asset paths
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.config import MASCOT_PATH, MASCOT_IMAGE
+
 # Page configuration
 st.set_page_config(
     page_title="Student Dashboard - Grade Management System",
     layout="wide",
-    page_icon = head_path,
+    page_icon=MASCOT_IMAGE if MASCOT_IMAGE is not None else MASCOT_PATH,
     initial_sidebar_state="collapsed",
 )
-
-# Path setup for imports
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
 
 # Imports after path setup
 from data.Subjects import SUBJECTS

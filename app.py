@@ -19,7 +19,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-logo = "./app/static/mascot.png"
+from src.config import MASCOT_PATH
+
+logo = MASCOT_PATH
 
 pages = [
     st.Page("pages/0_Home.py",              title="Home",           icon=":material/home:",     default=True),

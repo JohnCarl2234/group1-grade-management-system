@@ -4,16 +4,16 @@ import sys
 import time
 from pathlib import Path
 
-head_path = "./app/static/mascot.png"
+# Ensure project root is on sys.path and import shared asset paths
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from src.config import MASCOT_PATH, MASCOT_IMAGE
+
 # Set page config
 st.set_page_config(
     page_title="Login - Grade Management System",
-    page_icon = head_path,
-    layout="centered"
+    page_icon=MASCOT_IMAGE if MASCOT_IMAGE is not None else MASCOT_PATH,
+    layout="centered",
 )
-
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from auth import check_authentication, set_authenticated, sign_in_with_firebase
 

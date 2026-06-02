@@ -10,21 +10,21 @@ import time
 import pandas as pd
 import streamlit as st
 
-head_path = "./app/static/mascot.png"
+# Resolve project root early so we can import shared config
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# Import shared config for asset paths
+from src.config import MASCOT_PATH, MASCOT_IMAGE
 
 #Page Configuration
 st.set_page_config(
     page_title="Admin Dashboard - Grade Management System",
     layout="wide",
-    page_icon = head_path,
+    page_icon=MASCOT_IMAGE if MASCOT_IMAGE is not None else MASCOT_PATH,
     initial_sidebar_state="expanded",
 )
-
-#Project Root Setup
-#Resolve the project root so we can import from sibling directories
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
 
 #Imports
 from auth import check_authentication, logout
@@ -331,8 +331,18 @@ with st.sidebar:
         st.switch_page("pages/0_Home.py")
 
 
+logo_path = "./app/static/logo.png"
+st.markdown(
+    f"""
+    <div style="display: flex; align-items: left; gap: 15px; margin-bottom: 20px;">
+        <img src="{logo_path}" width="150vw" style="max-height:60px; object-fit: contain;">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 #  Title 
-st.title("📊 Student Grade Dashboard")
+st.title("Student Grade Dashboard")
 
 #Main Tabs
 students_table, student_manager = st.tabs([

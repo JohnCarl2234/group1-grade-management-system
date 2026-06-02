@@ -15,13 +15,15 @@ import streamlit as st
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-head_path = "./app/static/mascot.png"
+# Use shared asset path for mascot
+from src.config import MASCOT_PATH, MASCOT_IMAGE
+
 # Page configuration
 st.set_page_config(
-    page_title="Student Lookup - Grade Management System", 
+    page_title="Student Lookup - Grade Management System",
     layout="centered",
-    page_icon = head_path,
-    initial_sidebar_state="expanded"
+    page_icon=MASCOT_IMAGE if MASCOT_IMAGE is not None else MASCOT_PATH,
+    initial_sidebar_state="expanded",
 )
 
 # Imported after path setup to ensure the project root is on sys.path.

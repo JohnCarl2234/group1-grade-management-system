@@ -12,14 +12,21 @@ Student  ->        pages/2_Student_Form_Matching    (identity form)    *not yet 
 
 import streamlit as st
 from PIL import Image
+from os import sys
+from pathlib import Path
 
-head_path = "./app/static/mascot.png"
+# Resolve project root and import shared asset paths
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.config import MASCOT_PATH, MASCOT_IMAGE
 
 # Page configuration
 st.set_page_config(
     page_title="Grade Management System",
     layout="centered",
-    page_icon = head_path,
+    page_icon=MASCOT_IMAGE if MASCOT_IMAGE is not None else MASCOT_PATH,
     initial_sidebar_state="collapsed",
 )
 
