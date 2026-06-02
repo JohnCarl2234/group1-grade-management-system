@@ -214,7 +214,7 @@ if st.button("← Back", type="tertiary"):
 st.title("📋 My Grade Report")
 
 # Student Info Cards 
-c1, c2, c3, c4 = st.columns(4)
+c1, c2, c3, c4, c5= st.columns(5)
 with c1:
     st.markdown(f"""
         <div class="info-card">
@@ -241,6 +241,14 @@ with c4:
         <div class="info-card" style="border-top-color:#10B981">
             <div class="label">Year Level</div>
             <div class="value">{student.year_level}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with c5:
+    st.markdown(f"""
+        <div class="info-card" style="border-top-color:#10B981">
+            <div class="label">Enrollment Status</div>
+            <div class="value">{student.status}</div>
         </div>
     """, unsafe_allow_html=True)
 
