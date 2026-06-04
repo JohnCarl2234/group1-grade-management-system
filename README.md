@@ -37,11 +37,15 @@ Grad is a Grade Management System (GMS-CRUD) is a Python-based desktop web appli
 
 ## Or try online:
 Hosted via [Streamlit](https://bit.ly/4emJ0Aj)
-<img width="2921" height="810" alt="streamlit-logo-primary-colormark-lighttext" src="https://github.com/user-attachments/assets/7df0a20d-ceba-4312-96bd-8f95864b6f35" />
+<img width="1,805.315203955501" height="500.6180469715698" alt="streamlit-logo-primary-colormark-lighttext" src="https://github.com/user-attachments/assets/7df0a20d-ceba-4312-96bd-8f95864b6f35" />
 
 
 ## A collaborative project of Group 1:
+
 Project Manager: John Carl S. Acosta 
+
 Software Developers: Kerby F. Andres, Justin Paul A. Obera
+
 Quality Assurance Specialist (QA): Khian Xander L. Batula 
+
 Acting Client: Rishelvin C. Arizo
