@@ -38,7 +38,7 @@ Grad is a Grade Management System (GMS-CRUD) is a Python-based desktop web appli
 ## Or try online:
 Hosted via: 
 <a href="https://bit.ly/4emJ0Aj">
-  <img src="https://streamlit.io" alt="Streamlit App" height="40">
+  <img src="https://streamlit.io/images/brand/streamlit-logo-secondary-lightmark-lighttext.png" alt="Streamlit App" height="40">
 </a>
 
 ## A collaborative project of Group 1:
