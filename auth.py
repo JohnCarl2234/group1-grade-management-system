@@ -3,6 +3,7 @@ import json
 import os
 import urllib.error
 import urllib.request
+import time
 
 import streamlit as st
 
@@ -10,6 +11,8 @@ import streamlit as st
 AUTH_TOKEN_KEY = "auth_token"
 AUTH_USER_KEY = "auth_user"
 AUTH_SECRET = "group1-grade-management-system-auth"
+AUTH_ACTIVITY_KEY = "last_activity"
+AUTH_TIMEOUT_SECONDS = 30 * 60
 
 
 def get_firebase_api_key() -> str | None:
@@ -115,6 +118,17 @@ def check_authentication():
         st.session_state.authenticated = False
 
     if st.session_state.authenticated:
+        last_activity = st.session_state.get(AUTH_ACTIVITY_KEY)
+        now = time.time()
+
+        if last_activity and now - float(last_activity) > AUTH_TIMEOUT_SECONDS:
+            set_authenticated(False)
+            st.session_state.pop("role", None)
+            st.session_state.pop("firebase_user", None)
+            st.session_state.pop("current_student", None)
+            return False
+
+        st.session_state[AUTH_ACTIVITY_KEY] = now
         return True
 
     return _restore_auth_from_query_params()
@@ -128,10 +142,13 @@ def set_authenticated(authenticated: bool, user_email: str = None):
         st.session_state.user_email = user_email
         st.query_params[AUTH_USER_KEY] = user_email
         st.query_params[AUTH_TOKEN_KEY] = _build_auth_token(user_email)
+        st.session_state[AUTH_ACTIVITY_KEY] = time.time()
         return
 
     if "user_email" in st.session_state:
         del st.session_state.user_email
+
+    st.session_state.pop(AUTH_ACTIVITY_KEY, None)
 
     st.query_params.pop(AUTH_USER_KEY, None)
     st.query_params.pop(AUTH_TOKEN_KEY, None)
@@ -145,3 +162,4 @@ def get_user_email():
 def logout():
     """Clear authentication status."""
     set_authenticated(False)
+    
