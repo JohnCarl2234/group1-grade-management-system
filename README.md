@@ -36,7 +36,10 @@ Grad is a Grade Management System (GMS-CRUD) is a Python-based desktop web appli
 5. Open the application by visiting the local URL shown in the terminal (typically `http://127.0.0.1:5000`).
 
 ## Or try online:
-Hosted via [Streamlit](https://bit.ly/4emJ0Aj)
+Hosted via: 
+<a href="https://bit.ly/4emJ0Aj">
+  <img src="https://streamlit.io" alt="Streamlit App" height="40">
+</a>
 
 ## A collaborative project of Group 1:
 Project Manager: John Carl S. Acosta 
