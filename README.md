@@ -10,8 +10,6 @@ Grad is a Grade Management System (GMS-CRUD) is a Python-based desktop web appli
 - Create, Read, Update, Delete (CRUD) operations for:
   - Students
   - Grades
-  - Subjects
-  - Users
 - User authentication and login
 - Admin dashboard for managing records
 - Student lookup and student dashboard views
