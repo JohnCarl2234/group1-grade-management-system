@@ -30,7 +30,7 @@ Grad is a Grade Management System (GMS-CRUD) is a Python-based desktop web appli
 4. Run the application:
 
    ```bash
-   python app.py
+   python.exe -m streamlit run app.py [--string-args]
    ```
 
 5. Open the application by visiting the local URL shown in the terminal (typically `http://127.0.0.1:5000`).
@@ -42,5 +42,4 @@ Hosted via [Streamlit](https://bit.ly/4emJ0Aj)
 Project Manager: John Carl S. Acosta 
 Software Developers: Kerby F. Andres, Justin Paul A. Obera
 Quality Assurance Specialist (QA): Khian Xander L. Batula 
-Client: Rishelvin C. Arizo
-
+Acting Client: Rishelvin C. Arizo
